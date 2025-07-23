@@ -1,20 +1,22 @@
 {
   "name": "sporterra",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "start": "turbo run start",
+    "dev:client": "turbo run dev --filter=@sporterra/client",
+    "dev:admin": "turbo run dev --filter=@sporterra/admin",
+    "dev:api": "turbo run dev --filter=@sporterra/api"
   },
   "devDependencies": {
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.5",
-    "typescript": "5.8.3"
+    "turbo": "latest"
   },
-  "packageManager": "pnpm@9.0.0",
-  "engines": {
-    "node": ">=18"
-  }
+  "packageManager": "pnpm@8.6.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
