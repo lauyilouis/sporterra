@@ -1,26 +1,29 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import dotenv from 'dotenv';
-import * as schema from './schema.js';
+import * as schema from './schema';
+import { Pool } from 'pg';
 
 dotenv.config();
 
 // Create the connection
 const connectionString = process.env.DATABASE_URL || 'postgresql://sporterra:sporterra123@localhost:5432/sporterra';
 
-const client = postgres(connectionString, {
+const pool = new Pool({
+  connectionString,
   max: 10,
-  idle_timeout: 20,
-  connect_timeout: 10,
+  idleTimeoutMillis: 20000,
+  connectionTimeoutMillis: 10000,
 });
 
 // Create the database instance
-export const db = drizzle(client, { schema });
+export const db = drizzle(connectionString, { schema });
 
 // Test the connection
 export async function testConnection() {
   try {
-    await client`SELECT NOW()`;
+    const client = await pool.connect();
+    await client.query('SELECT NOW()');
+    client.release();
     console.log('✅ Connected to PostgreSQL database with Drizzle');
     return true;
   } catch (error) {
@@ -31,5 +34,5 @@ export async function testConnection() {
 
 // Close the connection (useful for graceful shutdown)
 export async function closeConnection() {
-  await client.end();
+  await pool.end();
 } 

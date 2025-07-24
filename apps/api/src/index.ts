@@ -1,7 +1,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
-import { db, testConnection } from './db/index.js'
+import { testConnection } from './db/index.js'
 
 const fastify = Fastify({
   logger: true
