@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import { testConnection } from './db/index.js'
+import { userSectionRoutes } from './routes/user-sections.js'
 
 const fastify = Fastify({
   logger: true
@@ -33,6 +34,9 @@ fastify.get('/health', async (request, reply) => {
     }
   }
 })
+
+// Register route plugins
+await fastify.register(userSectionRoutes)
 
 // API routes
 fastify.get('/api/hello', async (request, reply) => {
