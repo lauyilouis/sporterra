@@ -1,6 +1,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
+import { db, testConnection } from './db/index.js'
 
 const fastify = Fastify({
   logger: true
@@ -14,7 +15,23 @@ await fastify.register(helmet)
 
 // Health check route
 fastify.get('/health', async (request, reply) => {
-  return { status: 'ok', timestamp: new Date().toISOString() }
+  try {
+    // Test database connection with Drizzle
+    const isConnected = await testConnection()
+    
+    return { 
+      status: isConnected ? 'ok' : 'error', 
+      timestamp: new Date().toISOString(),
+      database: isConnected ? 'connected' : 'disconnected'
+    }
+  } catch (error) {
+    return { 
+      status: 'error', 
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }
+  }
 })
 
 // API routes

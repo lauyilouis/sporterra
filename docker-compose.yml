@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: sporterra-postgres
+    environment:
+      POSTGRES_DB: sporterra
+      POSTGRES_USER: sporterra
+      POSTGRES_PASSWORD: sporterra123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sporterra-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sporterra -d sporterra"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Server
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: sporterra-api
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://sporterra:sporterra123@postgres:5432/sporterra
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - sporterra-network
+    restart: unless-stopped
+
+networks:
+  sporterra-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local 

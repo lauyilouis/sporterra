@@ -8,7 +8,13 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:build": "docker build -t sporterra-api .",
+    "docker:run": "docker run -p 3001:3001 sporterra-api",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:push": "tsx src/db/migrate.ts"
   },
   "keywords": ["api", "fastify", "sporterra"],
   "author": "",
@@ -16,11 +22,19 @@
   "dependencies": {
     "fastify": "^4.24.3",
     "@fastify/cors": "^8.4.0",
-    "@fastify/helmet": "^11.1.1"
+    "@fastify/helmet": "^11.1.1",
+    "drizzle-orm": "^0.29.0",
+    "postgres": "^3.4.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "typescript": "^5.2.2",
     "@types/node": "^20.8.0",
+    "@types/bcryptjs": "^2.4.5",
+    "@types/jsonwebtoken": "^9.0.4",
+    "drizzle-kit": "^0.20.0",
     "tsx": "^4.6.0"
   }
 }
