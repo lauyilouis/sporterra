@@ -3,6 +3,9 @@ import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import { testConnection } from './db/index.js'
 import { userSectionRoutes } from './routes/user-sections.js'
+import { sectionRoutes } from './routes/sections.js'
+import { datagridRoutes } from './routes/datagrids.js'
+import { datagridColumnRoutes } from './routes/datagrid-columns.js'
 
 const fastify = Fastify({
   logger: true
@@ -37,6 +40,9 @@ fastify.get('/health', async (request, reply) => {
 
 // Register route plugins
 await fastify.register(userSectionRoutes)
+await fastify.register(sectionRoutes)
+await fastify.register(datagridRoutes)
+await fastify.register(datagridColumnRoutes)
 
 // API routes
 fastify.get('/api/hello', async (request, reply) => {
