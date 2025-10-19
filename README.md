@@ -1,6 +1,11 @@
 # Sporterra
 
-A self-hosted athlete resume system with LinkedIn-like profiles and an admin portal for layout configuration.
+WORK IN PROGRESS
+
+A self-hosted athlete profile system:
+- Multi-tenant: Allow multiple tenants on the platform
+- Dynamic athlete profile: Profile layout change according to different sports
+- Admin portal: Manage users and profile configuration
 
 ## 🏗️ Architecture
 
